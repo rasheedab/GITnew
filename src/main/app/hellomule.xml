@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ftp="http://www.mulesoft.org/schema/mule/ee/ftp" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/ftp http://www.mulesoft.org/schema/mule/ee/ftp/current/mule-ftp-ee.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8081" basePath="hello" doc:name="HTTP Listener Configuration"/>
+	<http:listener-config name="HTTP_Listener_Configuration1" host="0.0.0.0" port="1234" basePath="hello" doc:name="HTTP Listener Configuration"/>
+	<file:connector name="File" writeToDirectory="C:\Users\Admin-1\Desktop" readFromDirectory="C:\Users\Admin-1\Desktop" workDirectory="C:\Users\Admin-1\Desktop" autoDelete="true" streaming="true" validateConnections="true" doc:name="File"/>
+	<http:listener-config name="HTTP_Listener_Configuration2" host="0.0.0.0" port="8082" basePath="hello1" doc:name="HTTP Listener Configuration"/>
+	<flow name="hellomuleFlow">
+		<http:listener config-ref="HTTP_Listener_Configuration1" path="/helloworld" allowedMethods="GET" doc:name="HTTP"/>
+		<logger level="INFO" doc:name="Logger"/>
+		<set-payload value="hello #[message.inboundProperties.'http.query.params'.name]  with #[message.inboundProperties.'http.query.params'.id] and #[message.inboundProperties.'http.query.params'.city] welcome to Mulesoft" doc:name="Set Payload"/>
+	</flow>
+	<flow name="hellomuleFlow1">
+		<http:listener config-ref="HTTP_Listener_Configuration2" path="/helloworld1" allowedMethods="GET" doc:name="HTTP"/>
+		<logger level="INFO" doc:name="Logger"/>
+		<set-payload value="hello" doc:name="Set Payload"/>
+	</flow>
+</mule>
